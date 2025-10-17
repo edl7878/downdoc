@@ -235,6 +235,20 @@ describe('downdoc', () => {
       await downdoc({ args })
       expect('doc.md').to.be.a.file().with.contents(expected)
     })
+
+    it('should convert stem blocks with dollar delimiters when --math-syntax=dollars option is specified', async () => {
+      const input = heredoc`
+      [stem]
+      ++++
+      a^2 = b^2 + c^2
+      ++++
+      `
+      const expected = '$$\na^2 = b^2 + c^2\n$$\n'
+      await fsp.writeFile('doc.adoc', input, 'utf8')
+      const args = ['--math-syntax=dollars', 'doc.adoc']
+      await downdoc({ args })
+      expect('doc.md').to.be.a.file().with.contents(expected)
+    })
   })
 
   describe('npm publish', () => {

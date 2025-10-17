@@ -179,6 +179,17 @@ You can pass additional runtime AsciiDoc attributes using the `-a` (or `--attrib
 $ npx downdoc -a hide-uri-scheme -a markdown-list-indent=4 README.adoc
 ----
 
+You can control the syntax used for block math (stem blocks) using the `--math-syntax` option.
+By default, stem blocks are converted to Markdown code blocks with the `math` language.
+When `--math-syntax=dollars` is specified, stem blocks are converted to dollar-delimited display math blocks.
+
+[,console]
+----
+$ npx downdoc --math-syntax=dollars README.adoc
+----
+
+This option only affects block stem macros (delimited with `++++`), not inline stem macros.
+
 To print a usage statement that includes a complete list of available options, pass the `-h` option.
 
 === API

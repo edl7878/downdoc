@@ -1797,6 +1797,55 @@ describe('downdoc()', () => {
       `
       expect(downdoc(input)).to.equal(expected)
     })
+
+    it('should convert passthrough block with stem style to dollar delimiters when mathSyntax is dollars', () => {
+      const input = heredoc`
+      [stem]
+      ++++
+      a^2 = b^2 + c^2
+      ++++
+      `
+      const expected = heredoc`
+      $$
+      a^2 = b^2 + c^2
+      $$
+      `
+      expect(downdoc(input, { mathSyntax: 'dollars' })).to.equal(expected)
+    })
+
+    it('should preserve default behavior when mathSyntax is not dollars', () => {
+      const input = heredoc`
+      [stem]
+      ++++
+      a^2 = b^2 + c^2
+      ++++
+      `
+      const expected = heredoc`
+      \`\`\`math
+      a^2 = b^2 + c^2
+      \`\`\`
+      `
+      expect(downdoc(input, { mathSyntax: 'other' })).to.equal(expected)
+    })
+
+    it('should not affect inline stem macros when mathSyntax is dollars', () => {
+      const input = heredoc`
+      The solution is stem:[x^2 + y^2].
+
+      [stem]
+      ++++
+      a^2 = b^2 + c^2
+      ++++
+      `
+      const expected = heredoc`
+      The solution is $x^2 + y^2$.
+
+      $$
+      a^2 = b^2 + c^2
+      $$
+      `
+      expect(downdoc(input, { mathSyntax: 'dollars' })).to.equal(expected)
+    })
   })
 
   describe('tables', () => {
