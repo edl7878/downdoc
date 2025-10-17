@@ -7504,6 +7504,75 @@ describe('downdoc()', () => {
     })
   })
 
+  describe('line endings', () => {
+    it('should convert CRLF line endings to LF', () => {
+      const input = heredoc`
+      = Title
+
+      Content with CRLF.
+      `.replace(/\n/g, '\r\n')
+      const expected = heredoc`
+      # Title
+
+      Content with CRLF.
+      `
+      expect(downdoc(input)).to.equal(expected)
+    })
+
+    it('should preserve LF line endings', () => {
+      const input = heredoc`
+      = Title
+
+      Content with LF.
+      `
+      const expected = heredoc`
+      # Title
+
+      Content with LF.
+      `
+      expect(downdoc(input)).to.equal(expected)
+    })
+
+    it('should handle mixed line endings', () => {
+      const input = heredoc`
+      = Title
+
+      Mixed line endings.
+
+      End.
+      `.replace(/\n/g, '\r\n').replace(/\r\n\n/g, '\r\n\n')
+      const expected = heredoc`
+      # Title
+
+      Mixed line endings.
+
+      End.
+      `
+      expect(downdoc(input)).to.equal(expected)
+    })
+
+    it('should work with complex AsciiDoc content with CRLF', () => {
+      const input = heredoc`
+      = Document Title
+      :author: John Doe
+
+      == Section
+
+      * Item 1
+      * Item 2
+      `.replace(/\n/g, '\r\n')
+      const expected = heredoc`
+      # Document Title
+
+      ## Section
+
+      * Item 1
+      * Item 2
+      `
+      expect(downdoc(input)).to.equal(expected)
+    })
+  })
+
   describe('output', () => {
     it('should trim trailing blank line', () => {
       const input = heredoc`
