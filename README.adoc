@@ -90,7 +90,7 @@ Here's a rough list of the AsciiDoc syntax that downdoc current handles:
 * comment lines and blocks
 * passthrough blocks
 * stem blocks (i.e., display math) (assumes latexmath notation)
-* inline stem macro (no passthrough semantics)
+* inline stem macro (supports multi-line content; always converted to dollar-delimited inline math)
 * delimited example, open, and sidebar blocks (delimiter lines removed)
 
 Here's the list of document attributes unique to this converter that control its behavior:
@@ -181,7 +181,7 @@ $ npx downdoc -a hide-uri-scheme -a markdown-list-indent=4 README.adoc
 
 You can control the syntax used for block math (stem blocks) using the `--math-syntax` option.
 By default, stem blocks are converted to Markdown code blocks with the `math` language.
-When `--math-syntax=dollars` is specified, stem blocks are converted to dollar-delimited display math blocks.
+When `--math-syntax=dollars` is specified, stem blocks are converted to dollar-delimited display math blocks (`$$...$$`).
 
 [,console]
 ----
@@ -189,6 +189,7 @@ $ npx downdoc --math-syntax=dollars README.adoc
 ----
 
 This option only affects block stem macros (delimited with `++++`), not inline stem macros.
+Inline stem macros are always converted to dollar-delimited inline math (`$...$`) and support multi-line content.
 
 To print a usage statement that includes a complete list of available options, pass the `-h` option.
 
@@ -213,7 +214,10 @@ The `downdoc` function accepts an object (i.e., map) of options as the second ar
 downdoc(asciidoc, { attributes: { 'markdown-list-indent': 4 } })
 ----
 
-Currently the only supported option in the API is `attributes`, which is an object (i.e., map) of runtime AsciiDoc attributes.
+The following options are supported in the API:
+
+* `attributes`:: An object (i.e., map) of runtime AsciiDoc attributes
+* `mathSyntax`:: Specifies the math syntax for stem blocks; accepts `'dollars'` to convert stem blocks to dollar-delimited display math blocks (default: converts to Markdown code blocks with `math` language)
 
 ifndef::env-npm[]
 === npm publish
