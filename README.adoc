@@ -37,7 +37,7 @@ Rather, it's intended to be used on AsciiDoc documents that are written with con
 
 == Supported syntax
 
-In order for downdoc to convert an AsciiDoc document, it must have lines that end with LF (`\n`), not CRLF (`\r\n`).
+downdoc automatically converts CRLF line endings (`\r\n`) to LF (`\n`) in memory, so documents with Windows-style line endings are supported.
 
 Here's a rough list of the AsciiDoc syntax that downdoc current handles:
 
